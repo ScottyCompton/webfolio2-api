@@ -1,11 +1,13 @@
 const express = require('express');
 const catRouter = require('./category');
 const settingsRouter = require('./settings');
+const sliderImgRouter = require('./sliderImg');
 
 // register new routers here
 const routeCollection = [
     catRouter,
-    settingsRouter
+    settingsRouter,
+    sliderImgRouter
 ]; 
 
 

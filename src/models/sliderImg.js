@@ -3,7 +3,7 @@ const validator = require('validator')
 
 
 
-const SliderImg = new mongoose.Schema({
+const schemaSliderImg = new mongoose.Schema({
     originId: {
         type: String,
         required: true
@@ -19,7 +19,7 @@ const SliderImg = new mongoose.Schema({
         default: "portrait"
     },
     sortOrder: {
-        type: Boolean,
+        type: Number,
         required: false,
         default: 0,
     },
@@ -29,6 +29,6 @@ const SliderImg = new mongoose.Schema({
     }
 })
 
-const SliderImg = mongoose.model('SliderImg', SliderImgSchema);
+const SliderImg = mongoose.model('SliderImg', schemaSliderImg);
 
 module.exports = SliderImg;
