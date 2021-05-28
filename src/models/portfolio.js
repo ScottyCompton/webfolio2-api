@@ -4,6 +4,8 @@ const validator = require('validator')
 
 
 
+
+
 const portfolioSchema = new mongoose.Schema({
     githubUrl: {
         type: String,
@@ -45,7 +47,19 @@ const portfolioSchema = new mongoose.Schema({
         required: false,
         trim: true
     },
-    auxImgs:[String],
+    auxImgs:[
+        {
+            url: {
+                type: String,
+                required: true,
+                trim: true,
+            },
+            displayOrder: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
     auxImgAspectRatio: {
         type: String,
         required: false
