@@ -14,7 +14,13 @@ const categorySchema = new mongoose.Schema({
         type: Number,
         required: false,
         default: -1
+    },
+    catId: {
+        type: String,
+        required: false,
+        default: "0"
     }
+
 });
 
 
