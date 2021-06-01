@@ -4,8 +4,6 @@ const validator = require('validator')
 
 
 
-
-
 const portfolioSchema = new mongoose.Schema({
     githubUrl: {
         type: String,
@@ -42,43 +40,54 @@ const portfolioSchema = new mongoose.Schema({
         required: false,
         trim: true
     },
-    previewImg: {
+    previewImgUrl: {
         type: String,
         required: false,
         trim: true
     },
-    auxImgs:[
-        {
-            url: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            displayOrder: {
-                type: Number,
-                required: true
-            }
-        }
-    ],
-    auxImgAspectRatio: {
-        type: String,
+    previewImgData: {
+        type: Buffer,
         required: false
     },
     cso: [
         {
-            catId: {
-                type: String,
-                required: true,
+            category_id: {
+                type: String                
             },
-            sortOrder: {
-                type: Number,
-                required: true,
-                default: 0
+            displayOrder: {
+                type: Number
             }
         }
     ]
     
+}, {timestamps: true});
+
+
+portfolioSchema.virtual('auximgs', {
+    ref: 'AuxImg',
+    localField: '_id',
+    foreignField: 'owner'
 });
+
+
+// portfolioSchema.virtual('portCats', {
+//     ref: 'PortCat',
+//     localField: '_id',
+//     foreignField: 'portfolioId'
+// });
+
+
+
+// // delete portfolio images and portCats when the portfolio item is removed 
+// portfolioSchema.pre('remove', async function (next) {
+//     const portfolio = this;
+//     await AuxImg.deleteMany({owner: portfolio._id});
+//     await PortCat.deleteMany({portfolioId: portfolio._id})
+
+//     next();
+// });
+
+
 
 const Portfolio = mongoose.model('Portfolio', portfolioSchema);
 

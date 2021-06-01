@@ -4,6 +4,7 @@ const settingsRouter = require('./settings');
 const sliderImgRouter = require('./sliderImg');
 const usersRouter = require('./user');
 const portfolioRouter = require('./portfolio');
+const legacyRouter = require('./legacy');
 
 // register new routers here
 const routeCollection = [
@@ -11,7 +12,8 @@ const routeCollection = [
     settingsRouter,
     sliderImgRouter,
     usersRouter,
-    portfolioRouter
+    portfolioRouter,
+    legacyRouter
 ]; 
 
 

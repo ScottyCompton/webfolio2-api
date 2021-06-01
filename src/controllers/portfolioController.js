@@ -30,10 +30,11 @@ const deletePortfolio = async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const portfolio = await Portfolio.findByIdAndDelete(_id);
+        const portfolio = await Portfolio.findById(_id);
         if(!portfolio) {
             return res.status(500).send();
         }
+        await portfolio.remove();
         res.send(portfolio);
     } catch (error) {
         res.status(400).send();
@@ -81,7 +82,7 @@ const getPortfolio = async (req, res) => {
             return res.status(400).send('Apparenlty, there is nothing in your portfolio....')
         }
         res.send(portfolio);
-        
+
     } catch (error) {
         res.status(400).send(error);
     }
@@ -89,17 +90,21 @@ const getPortfolio = async (req, res) => {
 
 }
 
-const moveAuxImgUp = async (req, res) => {
+// const updateAuxImgs = async (req, res) => {
+//     const _id = req.params.id;
 
-}
-
-const moveAuxImgDown = async (req, res) => {
-
-}
-
-const deleteAuxImg = async (req, res) => {
-
-}
+//     try {
+//         const portfolio = await Portfolio.findById(_id);
+//         if(!portfolio) {
+//             res.status(400).send('couldn\'t find this portfolio item for some reason...')
+//         }
+//         portfolio.auxImgs = req.body.auxImgs;
+//         await portfolio.save();
+//         res.send(req.body)
+//     } catch (error) {
+//         res.status(400).send(error);
+//     }
+// }
 
 
 const togglePublished = async (req, res) => {
@@ -131,8 +136,5 @@ module.exports = {
     createPortfolio,
     getPortfolioById,
     getPortfolio,
-    moveAuxImgUp,
-    moveAuxImgDown,
-    deleteAuxImg,
     togglePublished
 }

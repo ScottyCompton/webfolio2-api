@@ -96,8 +96,13 @@ const deleteUser = async (req, res) => {
 const authenticateUser = async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.email, req.body.password);
-        const token = await user.generateAuthToken()
-        res.send({user, token});
+
+        if(!user || !user.email) {
+            res.status(200).send(user);
+        } else {
+            const token = await user.generateAuthToken()
+            res.send({user, token});    
+        }
     } catch (error) {
         res.status(400).send();
     }
