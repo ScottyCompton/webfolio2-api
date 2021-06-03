@@ -107,6 +107,62 @@ const getPortfolio = async (req, res) => {
 // }
 
 
+
+const moveAndSave = async (portfolioId, categoryId, direction = 1) => {
+
+    const portfolioItem = await Portfolio.findById(portfolioId);
+    const portfolioItem_cso = portfolioItem.cso;
+    const portfolioItem_catIdx = portfolioItem_cso.findIndex(item => item.category_id === categoryId);
+    const portfolioItem_displayOrder =  portfolioItem_cso[portfolioItem_catIdx].displayOrder
+    portfolioItem.cso[portfolioItem_catIdx].displayOrder =  portfolioItem_displayOrder + direction;
+
+    await portfolioItem.save();
+
+}
+
+
+const moveUp = async (req, res) => {
+    const {categoryId, portfolioId, adjacentId} = req.body
+
+    try {
+        console.clear();
+        await moveAndSave(portfolioId, categoryId, -1)
+        await moveAndSave(adjacentId, categoryId, 1)
+
+       const portfolio = await Portfolio.find({});
+        
+        res.send(portfolio);
+        
+    } catch (error) {
+        res.status(400).send({error: error.message});
+    } 
+    
+
+}
+
+
+
+
+const moveDown = async (req, res) => {
+    const {categoryId, portfolioId, adjacentId} = req.body
+
+    try {
+        console.clear();
+        await moveAndSave(portfolioId, categoryId, 1)
+        await moveAndSave(adjacentId, categoryId, -1)
+
+       const portfolio = await Portfolio.find({});
+        
+        res.send(portfolio);
+        
+    } catch (error) {
+        res.status(400).send({error: error.message});
+    } 
+    
+
+}
+
+
 const togglePublished = async (req, res) => {
     const _id = req.params.id;
 
@@ -136,5 +192,7 @@ module.exports = {
     createPortfolio,
     getPortfolioById,
     getPortfolio,
-    togglePublished
+    togglePublished,
+    moveUp,
+    moveDown
 }

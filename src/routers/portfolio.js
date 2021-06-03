@@ -9,6 +9,8 @@ router.get('/portfolio/:id', ctrl.getPortfolioById);
 router.patch('/portfolio/:id',auth,  ctrl.updatePortfolio);
 router.delete('/portfolio/:id', auth, ctrl.deletePortfolio);
 router.patch('/portfolio/publish/:id', auth, ctrl.togglePublished);
+router.post('/portfolio/moveup', auth, ctrl.moveUp),
+router.post('/portfolio/movedown', auth, ctrl.moveDown),
 //router.patch('/portfolio/auximgs/:id', auth, ctrl.updateAuxImgs);
 
 module.exports = router;

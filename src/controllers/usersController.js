@@ -52,7 +52,7 @@ const getUserById = async (req,res) => {
 const updateUser = async (req, res) => {
     const _id = req.params.id;
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['name', 'email', 'password', 'age']
+    const allowedUpdates = ['name', 'email', 'password']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update));
 
     if(!isValidOperation) {
@@ -60,8 +60,8 @@ const updateUser = async (req, res) => {
     }
 
     try {
-        //const user = await User.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true});
-        const user = await User.findById(_id);
+        const user = await User.findByIdAndUpdate(_id, req.body, {new: true, runValidators: true});
+        //const user = await User.findById(_id);
 
         updates.forEach((update) => user[update] = req.body[update]);
         await user.save();
@@ -116,9 +116,12 @@ const logoutUser = async (req, res) => {
             return token.token !== req.token;
         })
         await req.user.save();
-        res.send();
+        res.send({logout: 'success'});
     } catch (error) {
-        res.status(500).send();
+        res.status(500).send({
+            logout: 'fail',
+            reason: error.message
+        });
     }
 }
 
