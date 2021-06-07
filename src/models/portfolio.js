@@ -58,34 +58,24 @@ const portfolioSchema = new mongoose.Schema({
                 type: Number
             }
         }
-    ]
+    ],
+    auxImgs: [
+        {
+            auxImgUrl: {
+                type: String,
+            },
+            auxImgData: {
+                type: Buffer
+            }
+        }
+    ],
+    auxImgAspectRatio: {
+        type: Number,
+        required: false
+    }
     
 }, {timestamps: true});
 
-
-portfolioSchema.virtual('auximgs', {
-    ref: 'AuxImg',
-    localField: '_id',
-    foreignField: 'owner'
-});
-
-
-// portfolioSchema.virtual('portCats', {
-//     ref: 'PortCat',
-//     localField: '_id',
-//     foreignField: 'portfolioId'
-// });
-
-
-
-// // delete portfolio images and portCats when the portfolio item is removed 
-// portfolioSchema.pre('remove', async function (next) {
-//     const portfolio = this;
-//     await AuxImg.deleteMany({owner: portfolio._id});
-//     await PortCat.deleteMany({portfolioId: portfolio._id})
-
-//     next();
-// });
 
 
 

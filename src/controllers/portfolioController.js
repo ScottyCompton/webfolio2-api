@@ -1,7 +1,6 @@
 
-
 const Portfolio = require("../models/portfolio");
-
+const sharp = require('sharp')
 
 
 const updatePortfolio = async (req, res) => {
@@ -17,8 +16,8 @@ const updatePortfolio = async (req, res) => {
         if(!portfolio) {
             return res.status(400).send();
         }
-
-        res.send(portfolio);
+        const updatedPortfolio = await Portfolio.findById(_id);
+        res.send(updatedPortfolio);
 
     } catch (error) {
         res.status(400).send();
@@ -76,11 +75,12 @@ const getPortfolioById = async (req, res) => {
 const getPortfolio = async (req, res) => {
 
     try {
-        const portfolio = await Portfolio.find({});
+        const portfolio = await Portfolio.find({}).select(['-previewImgData','-auxImgs.auxImgData']);
 
         if(!portfolio) {
             return res.status(400).send('Apparenlty, there is nothing in your portfolio....')
         }
+        
         res.send(portfolio);
 
     } catch (error) {
@@ -89,23 +89,6 @@ const getPortfolio = async (req, res) => {
 
 
 }
-
-// const updateAuxImgs = async (req, res) => {
-//     const _id = req.params.id;
-
-//     try {
-//         const portfolio = await Portfolio.findById(_id);
-//         if(!portfolio) {
-//             res.status(400).send('couldn\'t find this portfolio item for some reason...')
-//         }
-//         portfolio.auxImgs = req.body.auxImgs;
-//         await portfolio.save();
-//         res.send(req.body)
-//     } catch (error) {
-//         res.status(400).send(error);
-//     }
-// }
-
 
 
 const moveAndSave = async (portfolioId, categoryId, direction = 1) => {
@@ -186,6 +169,165 @@ const togglePublished = async (req, res) => {
 }
 
 
+
+const uploadPreviewImage = async (req, res) => {
+    const portfolioId = req.params.id;
+
+    try {
+        const previewImgUrl = `portfolio/${portfolioId}/previewimg`;
+        const portfolio = await Portfolio.findById(portfolioId);
+        const buffer = await sharp(req.file.buffer).resize({width: 400, height: 600}).toBuffer();
+        portfolio.previewImgData = buffer;
+        portfolio.previewImgUrl = previewImgUrl;
+        await portfolio.save();
+        res.send({previewImgUrl,portfolioId});
+    
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message)
+    }
+}
+
+
+const deletePreviewImage = async (req, res) => {
+    const {portfolioId} = req.params;
+
+    try {
+        const portfolio = await Portfolio.findById(portfolioId);
+        portfolio.previewImgData = undefined;
+        portfolio.previewImgUrl = undefined;
+        res.send({portfolioId});        
+    } catch (error) {
+        res.status(500).send(error.message)
+    }
+}
+
+const fetchPreviewImage = async (req, res) => {
+    const portfolioId = req.params.id;
+
+    try {
+        const portfolio = await Portfolio.findById(portfolioId);    
+
+        if(!portfolio) {
+            throw new Error({error: 'This portfolio item could not be located'});
+        }
+
+        if(portfolio.previewImgData) {
+            res.set('Content-type', 'image/jpg');
+            res.send(portfolio.previewImgData);    
+        }
+
+    } catch (error) {
+        res.status(500).send(error);
+
+    }
+}
+
+
+
+
+
+
+const fetchAuxImage = async (req, res) => {
+    const {id, auximgid} = req.params;
+
+    try {
+        const portfolio = await Portfolio.findById(id);    
+
+        if(!portfolio) {
+            throw new Error({error: 'This portfolio could not be located'});
+        }
+
+        if(portfolio.auxImgs && portfolio.auxImgs.length > 0) {
+            
+            const auxImg = portfolio.auxImgs.find(img => img._id.toString() === auximgid.trim())
+
+            if(auxImg && auxImg.auxImgData) {
+                res.set('Content-type', 'image/jpg');
+                res.send(auxImg.auxImgData);    
+            }
+        }
+
+    } catch (error) {
+        res.status(500).send(error);
+
+    }
+}
+
+
+
+const uploadAuxImage = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const portfolio = await Portfolio.findById(id);
+        const buffer = await sharp(req.file.buffer).toBuffer();
+
+        let auxImgs = portfolio.auxImgs;
+
+        auxImgs.push({
+            auxImgUrl: '',
+            auxImgData: buffer
+        })        
+        portfolio.auxImgs = auxImgs;
+        const auximgid = portfolio.auxImgs[portfolio.auxImgs.length-1]._id;
+        portfolio.auxImgs[portfolio.auxImgs.length-1].auxImgUrl = `portfolio/${id}/auximg/${auximgid}`
+
+        await portfolio.save();
+
+        auxImgs = portfolio.auxImgs;
+
+        for(let index = 0; index <= auxImgs.length - 1; index++) {
+            auxImgs[index] = {
+                _id: auxImgs[index].id,
+                auxImgUrl: auxImgs[index].auxImgUrl
+            }
+        }
+
+        res.send(auxImgs);
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
+
+
+
+const deleteAuxImage = async (req, res) => {
+    const {id, auximgid} = req.params;
+
+    const portfolio = await Portfolio.findById(id);    
+
+    try {
+        if(!portfolio) {
+            throw new Error({error: 'This portfolio could not be located'});
+        }
+    
+        if(portfolio.auxImgs && portfolio.auxImgs.length > 0) {
+            const auxImgs = portfolio.auxImgs.slice();
+            const delIdx = auxImgs.findIndex(img => img._id === auximgid);
+            auxImgs.splice(delIdx, 1)
+            portfolio.auxImgs = auxImgs;
+            await portfolio.save();
+
+            auxImgs.forEach((img, index) => {
+                delete auxImgs[index].auxImgData
+            })
+
+            res.send(auxImgs);
+        }
+    
+    } catch (error) {
+        res.status(500).send(error);
+    }
+
+
+
+}
+
+
+
 module.exports = {
     updatePortfolio,
     deletePortfolio,
@@ -194,5 +336,11 @@ module.exports = {
     getPortfolio,
     togglePublished,
     moveUp,
-    moveDown
+    moveDown,
+    fetchPreviewImage,
+    uploadPreviewImage,
+    deletePreviewImage,
+    fetchAuxImage,
+    uploadAuxImage,
+    deleteAuxImage
 }
