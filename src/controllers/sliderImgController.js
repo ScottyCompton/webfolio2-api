@@ -7,7 +7,7 @@ const createSliderImg = async (req, res) => {
 
     let maxImg;
     try {
-        maxImg = await SliderImg.find({}).sort({ sortOrder: -1 }).limit(1).then(imgs => imgs[0].sortOrder);
+        maxImg = await SliderImg.find({}).sort({ displayOrder: -1 }).limit(1).then(imgs => imgs[0].displayOrder);
     
     } catch (err) {
         maxImg = -1;
@@ -15,7 +15,7 @@ const createSliderImg = async (req, res) => {
 
 
     try {
-        sliderImg.sortOrder = maxImg + 1;
+        sliderImg.displayOrder = maxImg + 1;
         await sliderImg.save();
         res.status(201).send(sliderImg);
     } catch (error) {
@@ -29,15 +29,16 @@ const createSliderImg = async (req, res) => {
 const moveUp = async (req, res) => {
     const _id = req.params.id;
     const sliderImg = await SliderImg.findById(_id).exec();
-    const imgAbove = await SliderImg.findOne({sortOrder: sliderImg.sortOrder - 1}).exec();
+    const imgAbove = await SliderImg.findOne({displayOrder: sliderImg.displayOrder - 1}).exec();
 
     try {
-        imgAbove.sortOrder = imgAbove.sortOrder + 1;
+        imgAbove.displayOrder = imgAbove.displayOrder + 1;
         await imgAbove.save();
 
-        sliderImg.sortOrder = sliderImg.sortOrder - 1;
+        sliderImg.displayOrder = sliderImg.displayOrder - 1;
         await sliderImg.save();
-        res.status(201).send(sliderImg);
+        const sliderImgs = await SliderImg.find({});
+        res.status(201).send(sliderImgs);
     } catch (error) {
         res.status(400).send(error.message)
     }
@@ -50,15 +51,16 @@ const moveUp = async (req, res) => {
 const moveDown = async (req, res) => {
     const _id = req.params.id;
     const sliderImg = await SliderImg.findById(_id).exec();
-    const imgBelow = await SliderImg.findOne({sortOrder: sliderImg.sortOrder + 1}).exec();
+    const imgBelow = await SliderImg.findOne({displayOrder: sliderImg.displayOrder + 1}).exec();
 
     try {
-        imgBelow.sortOrder = imgBelow.sortOrder - 1;
+        imgBelow.displayOrder = imgBelow.displayOrder - 1;
         await imgBelow.save();
 
-        sliderImg.sortOrder = sliderImg.sortOrder + 1;
+        sliderImg.displayOrder = sliderImg.displayOrder + 1;
         await sliderImg.save();
-        res.status(201).send(sliderImg);
+        const sliderImgs = await SliderImg.find({});
+        res.status(201).send(sliderImgs);
     } catch (error) {
         res.status(400).send(error.message)
     }
@@ -90,7 +92,10 @@ const deleteSliderImg = async (req, res) => {
         if(!sliderImg) {
             return res.status(404).send();
         }
-        res.send(sliderImg);
+        
+        const sliderImgs = await SliderImg.find({})
+        res.send(sliderImgs);
+
     } catch (error) {
         res.status(500).send();
     }    
@@ -112,7 +117,7 @@ const getSingleSliderImg = async (req, res) => {
 
 const getAllSliderImgs = async (req, res) => {
     try {
-        const sliderImgs = await SliderImg.find({}).sort({sortOrder: 'asc'});
+        const sliderImgs = await SliderImg.find({});
         if(!sliderImgs) {
             return res.status(400).send();
         }
@@ -123,6 +128,34 @@ const getAllSliderImgs = async (req, res) => {
 }
 
 
+const setAsForegroundImg = async (req, res) => {
+    const {id} = req.params;
+    
+    try {
+
+        const thisSliderImg = await SliderImg.findById(id);
+        const orientation = thisSliderImg.orientation;           // landscape or portrait
+        const options = { multi: true, upsert: true };
+
+        const conditions = {orientation};
+        const update = {
+            $set: {
+                isForeground: false
+            }
+        }
+        await SliderImg.updateMany(conditions, update, options);
+        thisSliderImg.isForeground = true;
+        await thisSliderImg.save();
+
+        const retVals = await SliderImg.find({});
+
+        res.send(retVals);
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
 
 module.exports = {
     createSliderImg,
@@ -131,5 +164,6 @@ module.exports = {
     getSingleSliderImg,
     getAllSliderImgs,
     moveUp,
-    moveDown
+    moveDown,
+    setAsForegroundImg
 }

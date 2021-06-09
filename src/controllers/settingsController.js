@@ -1,4 +1,5 @@
 const Settings = require('../models/settings');
+const sharp = require('sharp')
 
 
 const updateSettings = async (req, res) => {
@@ -29,7 +30,50 @@ const getSettings = async (req, res) => {
 }
 
 
+
+
+const uploadAboutImg = async (req, res) => {
+
+    try {
+        const aboutImgUrl = `settings/aboutimg`;
+        const settings = await Settings.findOne({});
+        const buffer = await sharp(req.file.buffer).resize({width: 400, height: 400}).toBuffer();
+        settings.aboutImgData = buffer;
+        settings.aboutImgUrl = aboutImgUrl;
+        await settings.save();
+        res.send({aboutImgUrl});
+    
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message)
+    }
+}
+
+
+const fetchAboutImg = async (req, res) => {
+
+    try {
+        const settings = await Settings.findOne({});
+
+        if(!settings) {
+            throw new Error({error: 'Setting could not be loaded...'});
+        }
+
+        if(settings.aboutImgData) {
+            res.set('Content-type', 'image/jpg');
+            res.send(settings.aboutImgData);    
+        }
+
+    } catch (error) {
+        res.status(500).send(error);
+
+    }
+}
+
+
 module.exports = {
     updateSettings,
     getSettings,
+    uploadAboutImg,
+    fetchAboutImg
 }

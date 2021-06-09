@@ -7,10 +7,13 @@ const settingsSchema = new mongoose.Schema({
         required: false,
         trim: true
     },
-    aboutImg: {
+    aboutImgUrl: {
         type: String,
         required: false,
         trim: true
+    },
+    aboutImgData: {
+        type: Buffer,        
     },
 
     aboutTitle: {

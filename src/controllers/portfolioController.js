@@ -64,6 +64,11 @@ const getPortfolioById = async (req, res) => {
         if(!portfolio) {
             return res.status(404).send();
         }
+
+        delete portfolio.createdAt;
+        delete portfolio.updatedAt;
+        delete portfolio.__v;
+
         res.send(portfolio);
     } catch (error) {
         res.status(500).send();

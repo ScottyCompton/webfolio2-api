@@ -4,10 +4,6 @@ const validator = require('validator')
 
 
 const schemaSliderImg = new mongoose.Schema({
-    originId: {
-        type: String,
-        required: true
-    },
     isForeground: {
         type: Boolean,
         required: false,
@@ -18,10 +14,8 @@ const schemaSliderImg = new mongoose.Schema({
         required: false,
         default: "portrait"
     },
-    sortOrder: {
-        type: Number,
-        required: false,
-        default: 0,
+    displayOrder: {
+        type: Number
     },
     src: {
         type: String,
