@@ -1,7 +1,15 @@
+/*
 const express = require('express');
 const router = new express.Router();
 const ctrl = require('../controllers/categoryController')
 const auth = require('../middleware/auth');
+*/
+
+
+import express from 'express';
+import * as ctrl from '../controllers/categoryController';
+import auth from '../middleware/auth';
+const router = new express.Router();
 
 router.post('/categories', auth, ctrl.createCategory);
 router.get('/categories', ctrl.getCategoryList);
@@ -11,7 +19,6 @@ router.delete('/categories/:id', auth, ctrl.deleteCategory);
 router.patch('/movecatdown/:id', auth, ctrl.moveDown);
 router.patch('/movecatup/:id',auth, ctrl.moveUp);
 
-module.exports = router;
-
+export default router;
 
 

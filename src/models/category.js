@@ -1,7 +1,10 @@
+/*
 const mongoose = require('mongoose')
 const validator = require('validator')
-//const bcrypt = require('bcryptjs')
-//const jwt = require('jsonwebtoken');
+*/
+
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 
 const categorySchema = new mongoose.Schema({
@@ -14,6 +17,11 @@ const categorySchema = new mongoose.Schema({
         type: Number,
         required: false,
         default: -1
+    },
+    active: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 }, {timestamps: true});
 
@@ -39,4 +47,4 @@ const categorySchema = new mongoose.Schema({
 
 const Category = mongoose.model('Category', categorySchema);
 
-module.exports = Category;
+export default Category;

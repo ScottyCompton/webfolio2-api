@@ -1,5 +1,11 @@
+/*
 const mongoose = require('mongoose')
 const validator = require('validator')
+*/
+
+import mongoose from 'mongoose';
+import validator from 'validator';
+
 
 const settingsSchema = new mongoose.Schema({
     aboutBlurb: {
@@ -84,4 +90,4 @@ const settingsSchema = new mongoose.Schema({
 
 const Settings = mongoose.model('Settings', settingsSchema);
 
-module.exports = Settings;
+export default Settings;

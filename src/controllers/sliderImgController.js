@@ -1,23 +1,44 @@
-
+/*
 const SliderImg = require('../models/sliderImg');
+const sharp = require('sharp')
+*/
+import SliderImg from '../models/sliderImg';
+import sharp from 'sharp';
 
 
-const createSliderImg = async (req, res) => {
-    const sliderImg = new SliderImg(req.body);
+const uploadSliderImg = async (req, res) => {
 
-    let maxImg;
+    const orientation = req.params.orientation;
+
+
+    let maxImg = -1;
     try {
-        maxImg = await SliderImg.find({}).sort({ displayOrder: -1 }).limit(1).then(imgs => imgs[0].displayOrder);
-    
-    } catch (err) {
-        maxImg = -1;
+        maxImg = await SliderImg.find({orientation}).sort({ displayOrder: -1 }).limit(1).then(imgs => imgs[0].displayOrder);
+    } catch (error) {
+        console.log(error)
     }
 
 
+
     try {
-        sliderImg.displayOrder = maxImg + 1;
+        const buffer = await sharp(req.file.buffer).toBuffer();
+
+        const sliderImg = await new SliderImg({
+            orientation,
+            isForeground: false,
+            displayOrder: maxImg + 1,
+            sliderImgUrl: '',
+            sliderImgData: buffer
+        });
+        
+        await sliderImg.save();    
+        const sliderImgUrl = `sliderimgs/${sliderImg._id}`;
+        sliderImg.sliderImgUrl = sliderImgUrl
         await sliderImg.save();
-        res.status(201).send(sliderImg);
+
+        const sliderImgs = await SliderImg.find({});
+
+        res.status(201).send(sliderImgs);
     } catch (error) {
         res.status(400).send(error)
     }
@@ -69,43 +90,59 @@ const moveDown = async (req, res) => {
 
 
 
-
-
-const updateSliderImg = async (req, res) => {
-    const _id = req.params.id;
-    const sliderImg = await SliderImg.findById(_id);
-    await sliderImg.save();
-
-    if(!sliderImg) {
-        return res.status(400).send();
-    }
-
-    res.send(sliderImg);
-
-}
-
 const deleteSliderImg = async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const sliderImg = await SliderImg.findByIdAndDelete(_id)
+        const sliderImg = await SliderImg.findByIdAndDelete(_id);
+
         if(!sliderImg) {
             return res.status(404).send();
         }
         
-        const sliderImgs = await SliderImg.find({})
-        res.send(sliderImgs);
+        const retval = await SliderImg.find({});
+        retval.forEach(async (img, index) => {
+            if(img.displayOrder >= sliderImg.displayOrder) {
+                retval[index].displayOrder = retval[index].displayOrder - 1;
+                await retval[index].save();
+                delete retval[index].sliderImgData;
+            }
+        })
+
+        res.send(retval);
 
     } catch (error) {
         res.status(500).send();
     }    
 }
 
+
+
+
+const fetchSliderImg = async (req, res) => {
+    const {id} = req.params;
+
+    try {
+        const sliderImg = await SliderImg.findById(id)
+
+        if(sliderImg && sliderImg.sliderImgData) {
+            res.set('Content-type', 'image/jpg');
+            res.send(sliderImg.sliderImgData);    
+        }
+
+    } catch (error) {
+        res.status(500).send(error);
+
+    }
+}
+
+
+
 const getSingleSliderImg = async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const sliderImg = await SliderImg.findById(_id);
+        const sliderImg = await SliderImg.findById(_id).select(['-sliderImgData']);
         if(!sliderImg) {
             return res.status(400).send();
         }
@@ -117,7 +154,7 @@ const getSingleSliderImg = async (req, res) => {
 
 const getAllSliderImgs = async (req, res) => {
     try {
-        const sliderImgs = await SliderImg.find({});
+        const sliderImgs = await SliderImg.find({}).select(['-sliderImgData']);
         if(!sliderImgs) {
             return res.status(400).send();
         }
@@ -157,11 +194,10 @@ const setAsForegroundImg = async (req, res) => {
 }
 
 
-module.exports = {
-    createSliderImg,
-    updateSliderImg,
+export {
+    uploadSliderImg,
     deleteSliderImg,
-    getSingleSliderImg,
+    fetchSliderImg,
     getAllSliderImgs,
     moveUp,
     moveDown,

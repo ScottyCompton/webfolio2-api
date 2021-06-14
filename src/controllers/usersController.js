@@ -1,5 +1,5 @@
-const User = require('../models/user');
-
+//const User = require('../models/user');
+import User from '../models/user';
 
 const createUser = async (req,res) => {
     const user = new User(req.body)
@@ -140,7 +140,7 @@ const logoutAllSessions = async (req, res) => {
 
 
 
-module.exports = {
+export {
     getUserList,
     getAuthenticatedUser,
     logoutAllSessions, 

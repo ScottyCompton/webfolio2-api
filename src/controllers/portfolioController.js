@@ -1,6 +1,10 @@
-
+/*
 const Portfolio = require("../models/portfolio");
 const sharp = require('sharp')
+*/
+
+import Portfolio from "../models/portfolio";
+import sharp from 'sharp';
 
 
 const updatePortfolio = async (req, res) => {
@@ -29,12 +33,16 @@ const deletePortfolio = async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const portfolio = await Portfolio.findById(_id);
-        if(!portfolio) {
+        const portfolioItem = await Portfolio.findById(_id);
+        if(!portfolioItem) {
             return res.status(500).send();
         }
-        await portfolio.remove();
-        res.send(portfolio);
+        await portfolioItem.remove();
+
+
+        delete portfolioItem.previewImgData;
+
+        res.send(portfolioItem);
     } catch (error) {
         res.status(400).send();
     }
@@ -320,6 +328,7 @@ const deleteAuxImage = async (req, res) => {
                 delete auxImgs[index].auxImgData
             })
 
+
             res.send(auxImgs);
         }
     
@@ -333,7 +342,7 @@ const deleteAuxImage = async (req, res) => {
 
 
 
-module.exports = {
+export {
     updatePortfolio,
     deletePortfolio,
     createPortfolio,

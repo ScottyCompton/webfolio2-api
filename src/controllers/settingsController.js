@@ -1,5 +1,9 @@
+/*
 const Settings = require('../models/settings');
 const sharp = require('sharp')
+*/
+import Settings from '../models/settings';
+import sharp from 'sharp';
 
 
 const updateSettings = async (req, res) => {
@@ -71,7 +75,7 @@ const fetchAboutImg = async (req, res) => {
 }
 
 
-module.exports = {
+export {
     updateSettings,
     getSettings,
     uploadAboutImg,

@@ -1,5 +1,5 @@
-const Category = require('../models/category');
-
+//const Category = require('../models/category');
+import Category from '../models/category';
 
 const createCategory = async (req, res) =>{
     const cat = new Category(req.body);
@@ -27,7 +27,7 @@ const createCategory = async (req, res) =>{
 const getCategoryList = async (req, res) => {
 
     try {
-        const tasks = await Category.find().sort({displayOrder: 'asc'});
+        const tasks = await Category.find({active: true}).sort({displayOrder: 'asc'});
         res.send(tasks);
     } catch(error) {
         res.status(400).send(error.message);
@@ -141,7 +141,7 @@ const getCategoryById = async (req, res) => {
 }
 
 
-module.exports = {
+export {
     createCategory,
     getCategoryList,
     updateCategory,

@@ -1,5 +1,6 @@
 
-const multer = require('multer');
+import multer from 'multer';
+
 const upload = multer(
     {
         limits: {
@@ -18,7 +19,7 @@ const uploadError = (error, req, res, next) => {
 };
 
 
-module.exports = {
+export {
     upload,
     uploadError
 }

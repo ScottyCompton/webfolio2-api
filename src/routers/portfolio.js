@@ -1,8 +1,10 @@
-const express = require('express');
+
+import express from 'express';
+import * as ctrl from '../controllers/portfolioController';
+import auth from '../middleware/auth';
+import {upload, uploadError} from '../middleware/upload';
+
 const router = new express.Router();
-const ctrl = require('../controllers/portfolioController');
-const auth = require('../middleware/auth');
-const {upload, uploadError} = require('../middleware/upload');
 
 router.post('/portfolio', auth, ctrl.createPortfolio);
 router.get('/portfolio', ctrl.getPortfolio);
@@ -19,7 +21,7 @@ router.get('/portfolio/:id/auximg/:auximgid', ctrl.fetchAuxImage);
 router.delete('/portfolio/:id/auximg/:auximgid', ctrl.deleteAuxImage);
 router.post('/portfolio/:id/auximg', upload.single('auxImgData'), ctrl.uploadAuxImage, uploadError);
 
-module.exports = router;
+export default router;
 
 
 

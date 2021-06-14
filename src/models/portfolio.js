@@ -1,7 +1,10 @@
+/*
 const mongoose = require('mongoose')
 const validator = require('validator')
-//const bcrypt = require('bcryptjs')
+*/
 
+import mongoose from 'mongoose';
+import validator from 'validator';
 
 
 const portfolioSchema = new mongoose.Schema({
@@ -81,4 +84,4 @@ const portfolioSchema = new mongoose.Schema({
 
 const Portfolio = mongoose.model('Portfolio', portfolioSchema);
 
-module.exports = Portfolio;
+export default Portfolio;

@@ -1,7 +1,10 @@
+/*
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();
-const connURL = process.env.DB_URL || "mongodb://127.0.0.1:27017/webfolio-api";
+const cfg = require('../helpers/appconfig');
+*/
+import mongoose from 'mongoose';
+import cfg from '../helpers/appconfig';
+
 const connOptions = {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -9,4 +12,4 @@ const connOptions = {
     useFindAndModify: false
 }
 
-mongoose.connect(connURL,connOptions);
+mongoose.connect(cfg.db_url ,connOptions);
