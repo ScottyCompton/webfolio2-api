@@ -4,7 +4,6 @@ import settingsRouter from './settings';
 import sliderImgRouter from './sliderImg';
 import usersRouter from './user';
 import portfolioRouter from './portfolio';
-import legacyRouter from './legacy';
 import appDataRouter from './appdata';
 
 // register new routers here
@@ -14,7 +13,6 @@ const routeCollection = [
     sliderImgRouter,
     usersRouter,
     portfolioRouter,
-    legacyRouter,
     appDataRouter
 ]; 
 
