@@ -25,4 +25,6 @@ const assignRoutes = (app) => {
     }) 
 }
 
+
+
 export default assignRoutes;
