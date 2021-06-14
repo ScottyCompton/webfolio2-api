@@ -1,7 +1,3 @@
-/*
-const Settings = require('../models/settings');
-const sharp = require('sharp')
-*/
 import Settings from '../models/settings';
 import sharp from 'sharp';
 

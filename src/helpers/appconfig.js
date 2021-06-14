@@ -1,10 +1,4 @@
 const env = process.env.NODE_ENV.trim();
-/*
-const path from 'path'';
-const chalk = require('chalk')
-*/
-
-import path from 'path';
 import chalk from 'chalk';
 
 

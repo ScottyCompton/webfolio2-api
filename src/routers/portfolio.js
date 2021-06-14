@@ -15,11 +15,11 @@ router.patch('/portfolio/publish/:id', auth, ctrl.togglePublished);
 router.post('/portfolio/moveup', auth, ctrl.moveUp);
 router.post('/portfolio/movedown', auth, ctrl.moveDown);
 router.get('/portfolio/:id/previewimg', ctrl.fetchPreviewImage);
-router.post('/portfolio/:id/previewimg',  upload.single('previewImgData'),  ctrl.uploadPreviewImage, uploadError);
-router.delete('/portfolio/:id/previewimg', ctrl.deletePreviewImage);
+router.post('/portfolio/:id/previewimg', auth, upload.single('previewImgData'),  ctrl.uploadPreviewImage, uploadError);
+router.delete('/portfolio/:id/previewimg', auth, ctrl.deletePreviewImage);
 router.get('/portfolio/:id/auximg/:auximgid', ctrl.fetchAuxImage);
-router.delete('/portfolio/:id/auximg/:auximgid', ctrl.deleteAuxImage);
-router.post('/portfolio/:id/auximg', upload.single('auxImgData'), ctrl.uploadAuxImage, uploadError);
+router.delete('/portfolio/:id/auximg/:auximgid', auth, ctrl.deleteAuxImage);
+router.post('/portfolio/:id/auximg', auth, upload.single('auxImgData'), ctrl.uploadAuxImage, uploadError);
 
 export default router;
 

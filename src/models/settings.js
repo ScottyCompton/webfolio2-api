@@ -1,8 +1,3 @@
-/*
-const mongoose = require('mongoose')
-const validator = require('validator')
-*/
-
 import mongoose from 'mongoose';
 import validator from 'validator';
 
@@ -76,6 +71,12 @@ const settingsSchema = new mongoose.Schema({
         trim: true
     },
 
+    skypeId: {
+        type: String,
+        required: false,
+        trim: true
+    },    
+    
     resumeUrl: {
         type: String,
         required: false,

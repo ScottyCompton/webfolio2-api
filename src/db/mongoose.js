@@ -1,7 +1,3 @@
-/*
-const mongoose = require('mongoose');
-const cfg = require('../helpers/appconfig');
-*/
 import mongoose from 'mongoose';
 import cfg from '../helpers/appconfig';
 

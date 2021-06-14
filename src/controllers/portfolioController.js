@@ -1,8 +1,3 @@
-/*
-const Portfolio = require("../models/portfolio");
-const sharp = require('sharp')
-*/
-
 import Portfolio from "../models/portfolio";
 import sharp from 'sharp';
 

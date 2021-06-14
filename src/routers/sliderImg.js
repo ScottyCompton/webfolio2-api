@@ -1,9 +1,3 @@
-/*
-const express = require('express');
-const ctrl = require('../controllers/sliderImgController');
-const {upload, uploadError} = require('../middleware/upload');
-*/
-
 import express from 'express';
 import * as ctrl from '../controllers/sliderImgController';
 import {upload, uploadError} from '../middleware/upload';

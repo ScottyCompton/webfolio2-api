@@ -1,4 +1,3 @@
-//const Category = require('../models/category');
 import Category from '../models/category';
 
 const createCategory = async (req, res) =>{

@@ -1,20 +1,10 @@
-/*
-const express = require('express');
-const router = new express.Router();
-const auth = require('../middleware/auth');
-const multer = require('multer');
-const importPortfolioData = require('../fixtures/import-legacy-portfolio-data');
-const importSliderData = require('../fixtures/import-legacy-slider-data');
-const importSettingsData = require('../fixtures/import-legacy-settings-data');
-*/
-
 
 import express from 'express';
 import auth from '../middleware/auth';
 import multer from 'multer';
-import PortfolioData from '../fixtures/import-legacy-portfolio-data';
-import SliderData from '../fixtures/import-legacy-slider-data';
-import SettingsData from '../fixtures/import-legacy-settings-data';
+import '../fixtures/import-legacy-portfolio-data';
+import '../fixtures/import-legacy-slider-data';
+import '../fixtures/import-legacy-settings-data';
 
 const router = new express.Router();
 

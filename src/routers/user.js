@@ -12,7 +12,7 @@ import auth from '../middleware/auth';
 
 const router = new express.Router();
 
-router.post('/users', ctrl.createUser);
+router.post('/users', auth, ctrl.createUser);
 router.get('/users/me', auth ,ctrl.getAuthenticatedUser);
 router.post('/users/logout', auth, ctrl.logoutUser)
 router.post('/users/logoutAll', auth, ctrl.logoutAllSessions)

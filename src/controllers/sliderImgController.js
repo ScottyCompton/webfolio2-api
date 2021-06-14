@@ -1,7 +1,3 @@
-/*
-const SliderImg = require('../models/sliderImg');
-const sharp = require('sharp')
-*/
 import SliderImg from '../models/sliderImg';
 import sharp from 'sharp';
 

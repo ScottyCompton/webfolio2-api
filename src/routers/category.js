@@ -1,10 +1,3 @@
-/*
-const express = require('express');
-const router = new express.Router();
-const ctrl = require('../controllers/categoryController')
-const auth = require('../middleware/auth');
-*/
-
 
 import express from 'express';
 import * as ctrl from '../controllers/categoryController';

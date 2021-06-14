@@ -31,7 +31,7 @@ app.listen(cfg.port, () => {
     console.clear();
     log(green('\n\n> Starting up WebFolio API...\n\n'))
     log(`${green(`> Data Source:........`)} ${yellow(cfg.db_url)}`);
-    log(`${green(`> Environment:.....`)} ${cfg.app_env}`)
+    log(`${green(`> Environment:........`)} ${cfg.app_env}`)
     log('\n\nAPI server running on port ' + cfg.port + ' - yay!');
 });
 
