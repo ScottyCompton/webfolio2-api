@@ -5,18 +5,18 @@ const nodeExternals = require('webpack-node-externals')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV.trim() === 'development') {
     require('dotenv').config({path: '.env.development'});
 }
 
+
 module.exports = (env, argv) => {
-    const isProduction = env==='production';
     return ({
         entry: {
             server: './src/app.js',
         },
         output: {
-            path: path.join(__dirname, `dist/app.js`),
+            path: path.join(__dirname, `dist`),
             publicPath: '/',
             filename: 'app.js'
         },
@@ -46,6 +46,6 @@ module.exports = (env, argv) => {
             'process.env.API_PORT': JSON.stringify(process.env.API_PORT),
             'process.env.API_ENV': JSON.stringify(process.env.API_ENV)
            })
-        ],        
+        ]          
     })
 }    

@@ -4,11 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build:dev": "rm -rf dist && webpack",
-        "build": "rm -rf dist && webpack --env production",
-        "start:dev": "node ./dist/app.js",
-        "start": "node ./dist/production/app.js",
-        "dev": "webpack serve --mode=development"
+        "build:dev": "set NODE_ENV=development && rm -rf dist && webpack",
+        "build:prod": "rm -rf dist && webpack",
+        "start": "node ./dist/app.js",
+        "heroku-postbuild": "npm run build:prod"
+
     },
     "keywords": [],
     "author": "",
