@@ -3,13 +3,20 @@ const webpack = require('webpack')
 const nodeExternals = require('webpack-node-externals')
 
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+
+if (process.env.NODE_ENV === 'development') {
+    require('dotenv').config({path: '.env.development'});
+}
+
 module.exports = (env, argv) => {
+    const isProduction = env==='production';
     return ({
         entry: {
             server: './src/app.js',
         },
         output: {
-            path: path.join(__dirname, `dist/${argv.mode}`),
+            path: path.join(__dirname, `dist/app.js`),
             publicPath: '/',
             filename: 'app.js'
         },
@@ -31,6 +38,14 @@ module.exports = (env, argv) => {
                 }
             }
             ]
-        }
+        },
+        plugins: [
+           new webpack.DefinePlugin({
+            'process.env.DB_URL': JSON.stringify(process.env.DB_URL),
+            'process.env.JWT_SECRET': JSON.stringify(process.env.JWT_SECRET),
+            'process.env.API_PORT': JSON.stringify(process.env.API_PORT),
+            'process.env.API_ENV': JSON.stringify(process.env.API_ENV)
+           })
+        ],        
     })
 }    

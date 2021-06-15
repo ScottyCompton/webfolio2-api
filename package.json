@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build:dev": "rm -rf dist/development && webpack --mode development",
-        "build": "rm -rf dist/production && webpack --mode production",
-        "start:dev": "node ./dist/development/app.js",
+        "build:dev": "rm -rf dist && webpack",
+        "build": "rm -rf dist && webpack --env production",
+        "start:dev": "node ./dist/app.js",
         "start": "node ./dist/production/app.js",
         "dev": "webpack serve --mode=development"
     },
