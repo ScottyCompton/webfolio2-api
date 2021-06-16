@@ -1,11 +1,4 @@
-/*
-require('./db/mongoose');
-const cfg = require('./helpers/appconfig');
-const chalk = require('chalk');
-const express = require('express');
-const routes = require('./routers/routers');
-const cors = require('cors');
-*/
+
 
 import './db/mongoose';
 import cfg from './helpers/appconfig'
