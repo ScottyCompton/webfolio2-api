@@ -4,6 +4,7 @@ import settingsRouter from './settings';
 import sliderImgRouter from './sliderImg';
 import usersRouter from './user';
 import portfolioRouter from './portfolio';
+import contactItemRouter from './contactItem';
 import appDataRouter from './appdata';
 
 // register new routers here
@@ -13,6 +14,7 @@ const routeCollection = [
     sliderImgRouter,
     usersRouter,
     portfolioRouter,
+    contactItemRouter,
     appDataRouter
 ]; 
 
