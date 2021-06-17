@@ -6,8 +6,9 @@ import auth from '../middleware/auth';
 const router = new express.Router();
 
 router.get('/contactitems', ctrl.getContactItemList);
-router.post('/contactitem',auth, ctrl.createContactItem);
-router.put('/contactitem/',auth, ctrl.updateContactItem);
-router.delete('/contactitem/:id',auth,  ctrl.deleteContactItem);
+router.post('/contactitems',auth, ctrl.createContactItem);
+router.put('/contactitems/:id',auth, ctrl.updateContactItem);
+router.delete('/contactitems/:id',auth,  ctrl.deleteContactItem);
+router.patch('/contactitems', auth, ctrl.moveContactItem);
 
 export default router;
