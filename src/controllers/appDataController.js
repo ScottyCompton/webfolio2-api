@@ -7,7 +7,7 @@ import ContactItem from '../models/contactItem';
 const getAllAppData = async (req, res) => {
 
     try {
-        const portfolio = await Portfolio.find({}).select(['-previewImgData', '-auxImgs.auxImgData']);
+        const portfolio = await Portfolio.find({published: true}).select(['-previewImgData', '-auxImgs.auxImgData']);
         const categories = await Category.find({active: true});
         const settings = await Settings.findOne({}).select(['-aboutImgData']);
         const sliderImgs = await SliderImg.find({}).select(['-sliderImgData']);
